@@ -12,25 +12,23 @@ import { ProductList } from './styles';
 class Home extends Component {
     state = {
         products: [],
-    };
+    }
 
     async componentDidMount() {
         const response = await api.get('/products');
 
-        const data = response.data.map(
-            product => ({
-                ...product,
-                priceFormatted: formatPrice(product.price),
-            })
-        );
+        const data = response.data.map(product => ({
+            ...product,
+            priceFormatted: formatPrice(product.price),
+        }));
 
         this.setState({ products: data });
-    };
+    }
 
-    handleAddProduct = product => {
-        const { addToCart } = this.props;
+    handleAddProduct = id => {
+        const { addToCartRequest } = this.props;
 
-        addToCart(product);
+        addToCartRequest(id);
     };
 
     render() {
@@ -39,23 +37,24 @@ class Home extends Component {
 
         return (
             <ProductList>
-                { products.map(
-                    product => (
-                        <li key={ product.id }>
-                            <img src={ product.image } alt={ product.title }/>
-                            <strong>{ product.title }</strong>
-                            <span>{ product.priceFormatted }</span>
+                {products.map(product => (
+                    <li key={product.id}>
+                        <img src={product.image} alt={product.title} />
+                        <strong>{product.title}</strong>
+                        <span>{product.priceFormatted}</span>
 
-                            <button type="button" onClick={ () => this.handleAddProduct(product) }>
-                                <div>
-                                    <MdAddShoppingCart size={16} color="#fff" />
-                                    { amount[product.id] || 0}
-                                </div>
-                                <span>ADICIONAR AO CARRINHO</span>
-                            </button>
-                        </li>
-                    )
-                )}
+                        <button
+                            type="button"
+                            onClick={() => this.handleAddProduct(product.id)}
+                        >
+                            <div>
+                                <MdAddShoppingCart size={16} color="#fff" />
+                                {amount[product.id] || 0}
+                            </div>
+                            <span>ADICIONAR AO CARRINHO</span>
+                        </button>
+                    </li>
+                ))}
             </ProductList>
         );
     };
@@ -72,7 +71,4 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch =>
     bindActionCreators(CartActions, dispatch);
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(Home);
+export default connect(mapStateToProps, mapDispatchToProps)(Home);
