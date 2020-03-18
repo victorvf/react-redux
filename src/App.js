@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
+import { ToastContainer, Zoom } from 'react-toastify';
 
 import './config/ReactotronConfig';
 
@@ -13,16 +14,18 @@ import Header from './components/Header';
 import store from './store';
 
 function App() {
-  return (
-      <Provider store={store} >
-        <BrowserRouter>
-            <GlobalStyle />
-            <Header />
+    return (
+        <Provider store={store}>
+            <BrowserRouter>
+                <GlobalStyle />
+                <Header />
 
-            <Routes />
-        </BrowserRouter>
-      </Provider>
-  );
-};
+                <Routes />
+
+                <ToastContainer autoClose={3000} transition={Zoom} />
+            </BrowserRouter>
+        </Provider>
+    );
+}
 
 export default App;
